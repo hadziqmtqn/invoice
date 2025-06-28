@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ZohoConfig extends Model
 {
@@ -20,5 +21,10 @@ class ZohoConfig extends Model
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    public function zohoToken(): HasOne
+    {
+        return $this->hasOne(ZohoToken::class, 'zoho_config_id');
     }
 }
