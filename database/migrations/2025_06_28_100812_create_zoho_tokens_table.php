@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('api_domain');
             $table->string('token_type');
             $table->integer('expires_in');
+            $table->timestamp('expired_at');
             $table->timestamps();
 
             $table->foreign('zoho_config_id')->references('id')->on('zoho_configs')->cascadeOnDelete();

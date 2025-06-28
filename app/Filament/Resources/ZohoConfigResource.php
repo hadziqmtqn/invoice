@@ -77,21 +77,23 @@ class ZohoConfigResource extends Resource
             ]);
     }
 
+
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('organization.name'),
 
-                TextColumn::make('grant_type'),
-
-                TextColumn::make('code'),
+                TextColumn::make('grant_type')
+                    ->color(fn (string $state): string => match ($state) {
+                        'authorization_code' => 'success',
+                        'refresh_token' => 'warning'
+                    }),
 
                 TextColumn::make('client_id'),
 
                 TextColumn::make('client_secret'),
-
-                TextColumn::make('redirect_url'),
             ])
             ->filters([
                 //

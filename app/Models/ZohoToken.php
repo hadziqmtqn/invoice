@@ -13,5 +13,13 @@ class ZohoToken extends Model
         'api_domain',
         'token_type',
         'expires_in',
+        'expired_at'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'expired_at' => 'timestamp'
+        ];
+    }
 }
