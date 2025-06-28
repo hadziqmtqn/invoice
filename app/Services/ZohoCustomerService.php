@@ -19,19 +19,13 @@ class ZohoCustomerService
 
         $body = $this->withZohoToken($config, function ($accessToken, $client) use ($config) {
             $url = "{$config->zohoToken?->api_domain}/invoice/v3/customers?organization_id={$config->organization?->organization_id}";
-            $response = $client->get($url, [
+            return $client->get($url, [
                 'headers' => [
                     'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
                     'Accept' => 'application/json',
                 ],
                 'http_errors' => false,
             ]);
-
-            if (is_array($response)) return $response;
-            if (is_object($response) && method_exists($response, 'getBody')) {
-                return json_decode($response->getBody()->getContents(), true);
-            }
-            return [];
         });
 
         return $body['contacts'] ?? [];
