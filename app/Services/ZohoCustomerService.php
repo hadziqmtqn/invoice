@@ -18,7 +18,7 @@ class ZohoCustomerService
         $config->load(['zohoToken', 'organization']);
 
         $body = $this->withZohoToken($config, function ($accessToken, $client) use ($config) {
-            $url = "{$config->zohoToken?->api_domain}/invoice/v3/contacts?organization_id={$config->organization?->organization_id}";
+            $url = "{$config->zohoToken?->api_domain}/invoice/v3/customers?organization_id={$config->organization?->organization_id}";
             $response = $client->get($url, [
                 'headers' => [
                     'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
