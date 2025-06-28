@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Hash;
@@ -49,7 +50,7 @@ class Account extends Page implements HasForms
             TextInput::make('password')
                 ->label('New Password')
                 ->password()
-                ->required(fn ($get) => filled($get('current_password')))
+                ->required(fn (Get $get) => filled($get('current_password')))
                 ->minLength(8)
                 ->confirmed()
                 ->nullable(),
@@ -57,7 +58,7 @@ class Account extends Page implements HasForms
             TextInput::make('password_confirmation')
                 ->label('Confirm New Password')
                 ->password()
-                ->required(fn($get) => filled($get('password')))
+                ->required(fn(Get $get) => filled($get('password')))
                 ->same('password')
                 ->nullable(),
         ];
