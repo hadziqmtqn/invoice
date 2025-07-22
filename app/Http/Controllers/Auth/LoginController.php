@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Traits\ApiResponse;
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,17 +34,15 @@ class LoginController extends Controller
         return $this->apiResponse('Cek kembali akun anda', null, Response::HTTP_BAD_REQUEST);
     }
 
-    public function logout(Request $request): RedirectResponse
+    public function logout(): JsonResponse
     {
         try {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+            Auth::user()->tokens()->delete();
 
-            return to_route('login')->with('success', 'Berhasil logout.');
+            return $this->apiResponse('Logout success', null, Response::HTTP_OK);
         }catch (Exception $exception) {
             Log::error($exception->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat logout.');
+            return $this->apiResponse('Internal server error', null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

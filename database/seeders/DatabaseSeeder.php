@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,5 +16,8 @@ class DatabaseSeeder extends Seeder
             SuperAdminSeeder::class,
             OrganizationSeeder::class
         ]);
+
+        User::factory(300)
+            ->create();
     }
 }

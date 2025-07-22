@@ -24,6 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 return $responder->apiResponse('Access Forbidden', null, Response::HTTP_FORBIDDEN);
             }
 
+            if ($response->getStatusCode() === 404) {
+                return $responder->apiResponse('Data not found');
+            }
+
             if ($response->getStatusCode() === 302) {
                 $location = $response->headers->get('Location');
                 if ($location && str_contains($location, 'login')) {
