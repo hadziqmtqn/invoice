@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -51,6 +53,17 @@ class User extends Authenticatable
 
     public function avatar(): string|UrlGenerator
     {
-        return url('https://ui-avatars.com/api/?name='. $this->name .'&color=7F9CF5&background=EBF4FF');
+        return url('https://ui-avatars.com/api/?name=' . $this->name . '&color=7F9CF5&background=EBF4FF');
+    }
+
+    // TODO Scope
+    #[Scope]
+    protected function filter(Builder $query, $filter): Builder
+    {
+        $search = $filter['search'];
+
+        $query->when($search, fn($query) => $query->whereLike('name', '%' . $search . '%'));
+
+        return $query;
     }
 }
