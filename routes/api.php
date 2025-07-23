@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\AccountController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\UsersController;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index']);
 
     Route::post('logout', [LoginController::class, 'logout']);
+
+    Route::get('auth/me', [AccountController::class, 'index']);
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UsersController::class, 'index']);

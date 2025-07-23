@@ -21,10 +21,7 @@ class LoginController extends Controller
             $credentials = $request->only('email', 'password');
 
             if (Auth::attempt($credentials)) {
-                return $this->apiResponse('Login success', [
-                    'name' => Auth::user()->name,
-                    'token' => Auth::user()->createToken('web', ['*'], now()->addWeek())->plainTextToken
-                ], Response::HTTP_OK);
+                return $this->apiResponse('Login success', Auth::user()->createToken('web', ['*'], now()->addWeek())->plainTextToken, Response::HTTP_OK);
             }
         }catch (Exception $exception){
             Log::error($exception->getMessage());
