@@ -5,21 +5,19 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
 use App\Traits\HandlesApiTryCatch;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class AccountController extends Controller
+class AppController extends Controller
 {
     use ApiResponse, HandlesApiTryCatch;
 
     public function index(): JsonResponse
     {
         return $this->tryCatchApi(function () {
-            $user = Auth::user();
             return $this->apiResponse('Get data success', [
-                'name' => $user->name,
-                'email' => $user->email
+                'appName' => config('app.name'),
+                'appLogo' => asset('assets/favicon.png')
             ], Response::HTTP_OK);
         });
     }
