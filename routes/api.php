@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\AccountController;
 use App\Http\Controllers\Dashboard\AppController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\OrganizationController;
 use App\Http\Controllers\Dashboard\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,5 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/store', [UsersController::class, 'store']);
         Route::put('/{user:id}/update', [UsersController::class, 'update']);
         Route::delete('/{user:id}/delete', [UsersController::class, 'delete']);
+    });
+
+    Route::prefix('organization')->group(function () {
+        Route::get('/', [OrganizationController::class, 'index']);
+        Route::post('/store', [OrganizationController::class, 'store']);
     });
 });

@@ -28,6 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 return $responder->apiResponse('Data not found');
             }
 
+            if ($response->getStatusCode() === 405) {
+                return $responder->apiResponse('Method not allowed', null, Response::HTTP_METHOD_NOT_ALLOWED);
+            }
+
             if ($response->getStatusCode() === 302) {
                 $location = $response->headers->get('Location');
                 if ($location && str_contains($location, 'login')) {

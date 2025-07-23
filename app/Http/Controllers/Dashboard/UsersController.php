@@ -9,14 +9,13 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
 use App\Traits\ApiResponse;
-use Exception;
-use Illuminate\Support\Facades\Log;
+use App\Traits\HandlesApiTryCatch;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, HandlesApiTryCatch;
 
     protected UserService $userService;
 
@@ -30,23 +29,20 @@ class UsersController extends Controller
 
     public function index(SearchRequest $request): JsonResponse
     {
-        try {
+        return $this->tryCatchApi(function () use ($request) {
             $users = User::filter($request)
                 ->orderByDesc('created_at')
                 ->paginate($this->sort($request));
-        } catch (Exception $exception) {
-            Log::error($exception->getMessage());
-            return $this->apiResponse('Internal server error', null, Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
 
-        return $this->paginateResponse($users->getCollection()->map(function (User $user) {
-            return [
-                'id' => $user->id,
-                'avatar' => $user->avatar(),
-                'name' => $user->name,
-                'email' => $user->email
-            ];
-        }), $users, Response::HTTP_OK);
+            return $this->paginateResponse($users->getCollection()->map(function (User $user) {
+                return [
+                    'id' => $user->id,
+                    'avatar' => $user->avatar(),
+                    'name' => $user->name,
+                    'email' => $user->email
+                ];
+            }), $users, Response::HTTP_OK);
+        });
     }
 
     public function store(NewUserRequest $request)
