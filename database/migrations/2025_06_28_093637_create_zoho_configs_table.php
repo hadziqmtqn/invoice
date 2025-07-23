@@ -10,8 +10,7 @@ return new class extends Migration {
         Schema::create('zoho_configs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('organization_id')->unique();
-            $table->enum('grant_type', ['authorization_code', 'refresh_token']);
-            $table->string('code')->nullable();
+            $table->string('code');
             $table->string('client_id');
             $table->string('client_secret');
             $table->string('redirect_url');

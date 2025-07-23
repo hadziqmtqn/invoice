@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\AppController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\OrganizationController;
 use App\Http\Controllers\Dashboard\UsersController;
+use App\Http\Controllers\Dashboard\ZohoConfigController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,5 +34,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('organization')->group(function () {
         Route::get('/', [OrganizationController::class, 'index']);
         Route::post('/store', [OrganizationController::class, 'store']);
+    });
+
+    Route::prefix('zoho-config')->group(function () {
+        Route::get('/', [ZohoConfigController::class, 'index']);
+        Route::put('/{zohoConfig:id}/update', [ZohoConfigController::class, 'update']);
     });
 });

@@ -10,7 +10,6 @@ class ZohoConfig extends Model
 {
     protected $fillable = [
         'organization_id',
-        'grant_type',
         'code',
         'client_id',
         'client_secret',

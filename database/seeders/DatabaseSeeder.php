@@ -14,10 +14,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SuperAdminSeeder::class,
-            OrganizationSeeder::class
+            OrganizationSeeder::class,
+            ZohoConfigSeeder::class
         ]);
 
-        User::factory(300)
+        User::factory(50)
             ->create();
     }
 }
