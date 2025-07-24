@@ -49,7 +49,9 @@ class ZohoConfigController extends Controller
             $zohoConfig->refresh_token = $request->input('refresh_token');
             $zohoConfig->save();
 
-            ZohoTokenService::requestAndStoreToken($zohoConfig);
+            if ($zohoConfig->code != $request->input('code') || $zohoConfig->client_id != $request->input('client_id') || $zohoConfig->client_secret != $request->input('client_secret')) {
+                ZohoTokenService::requestAndStoreToken($zohoConfig);
+            }
             DB::commit();
 
             return $this->apiResponse('Get data success', [
