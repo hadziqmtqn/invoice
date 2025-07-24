@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Organization;
 use App\Traits\AutoRefreshesZohoToken;
 use Exception;
@@ -19,7 +20,6 @@ class ZohoCustomerService
             $url = $organization->zohoConfig?->zohoToken?->api_domain . '/invoice/v3/contacts';
             return $client->get($url, [
                 'headers' => [
-                    'Accept' => 'application/json',
                     'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
                     'X-com-zoho-invoice-organizationid' => $organization->organization_id
                 ],
@@ -42,10 +42,30 @@ class ZohoCustomerService
             $url = $organization->zohoConfig?->zohoToken?->api_domain . '/invoice/v3/contacts/' . $customerId;
             return $client->get($url, [
                 'headers' => [
-                    'Accept' => 'application/json',
                     'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
                     'X-com-zoho-invoice-organizationid' => $organization->organization_id
                 ],
+                'http_errors' => false,
+            ]);
+        });
+
+        return $body['contact'] ?? [];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function update(UpdateCustomerRequest $request, Organization $organization, $customerId): array
+    {
+        $body = $this->withZohoToken($organization->zohoConfig, function ($accessToken, $client) use ($request, $organization, $customerId) {
+            $url = $organization->zohoConfig?->zohoToken?->api_domain . '/invoice/v3/contacts/' . $customerId;
+            return $client->put($url, [
+                'headers' => [
+                    'content-type' => 'application/json',
+                    'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
+                    'X-com-zoho-invoice-organizationid' => $organization->organization_id
+                ],
+                'json' => $request->all(),
                 'http_errors' => false,
             ]);
         });

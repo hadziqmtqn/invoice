@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\GetCustomerRequest;
+use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Organization;
 use App\Services\ZohoCustomerService;
 use App\Traits\ApiResponse;
@@ -45,8 +46,16 @@ class CustomerController extends Controller
         $organization->load('zohoConfig.zohoToken');
 
         return $this->tryCatchApi(function () use ($organization, $customerId) {
-
             return $this->apiResponse('Get data success', $this->zohoCustomerService->show($organization, $customerId), Response::HTTP_OK);
+        });
+    }
+
+    public function update(UpdateCustomerRequest $request, Organization $organization, $customerId): JsonResponse
+    {
+        $organization->load('zohoConfig.zohoToken');
+
+        return $this->tryCatchApi(function () use ($request, $organization, $customerId) {
+            return $this->apiResponse('Update data success', $this->zohoCustomerService->update($request, $organization, $customerId), Response::HTTP_OK);
         });
     }
 }
