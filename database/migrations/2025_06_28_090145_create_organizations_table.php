@@ -9,6 +9,7 @@ return new class extends Migration {
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
+            $table->uuid('slug');
             $table->string('name');
             $table->string('organization_id');
             $table->timestamps();

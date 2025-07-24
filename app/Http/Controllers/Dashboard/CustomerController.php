@@ -31,7 +31,22 @@ class CustomerController extends Controller
             $organization = Organization::with('zohoConfig.zohoToken')
                 ->findOrFail($request->input('organization_id'));
 
-            return $this->apiResponse('Get data success', $this->zohoCustomerService->getCustomers($organization), Response::HTTP_OK);
+            return $this->apiResponse('Get data success', [
+                'organizationSlug' => $organization->slug,
+                'organizationName' => $organization->name,
+                'organizationId' => $organization->organization_id,
+                'custumers' => $this->zohoCustomerService->getCustomers($organization, $request)
+            ], Response::HTTP_OK);
+        });
+    }
+
+    public function show(Organization $organization, $customerId): JsonResponse
+    {
+        $organization->load('zohoConfig.zohoToken');
+
+        return $this->tryCatchApi(function () use ($organization, $customerId) {
+
+            return $this->apiResponse('Get data success', $this->zohoCustomerService->show($organization, $customerId), Response::HTTP_OK);
         });
     }
 }
