@@ -5,14 +5,26 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Organization\OrganizationRequest;
 use App\Models\Organization;
+use App\Services\OrganizationService;
 use App\Traits\ApiResponse;
 use App\Traits\HandlesApiTryCatch;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrganizationController extends Controller
 {
     use ApiResponse, HandlesApiTryCatch;
+
+    protected OrganizationService $organizationService;
+
+    /**
+     * @param OrganizationService $organizationService
+     */
+    public function __construct(OrganizationService $organizationService)
+    {
+        $this->organizationService = $organizationService;
+    }
 
     public function index(): JsonResponse
     {
@@ -39,5 +51,10 @@ class OrganizationController extends Controller
 
             return $this->apiResponse('Update data success', $organization, Response::HTTP_OK);
         });
+    }
+
+    public function select(Request $request)
+    {
+        return $this->organizationService->select($request);
     }
 }

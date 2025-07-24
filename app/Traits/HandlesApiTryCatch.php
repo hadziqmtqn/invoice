@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
@@ -20,6 +21,7 @@ trait HandlesApiTryCatch
         try {
             return $callback();
         } catch (Exception $exception) {
+            DB::rollBack();
             Log::error($exception->getMessage());
             return $this->apiResponse($errorMessage, null, Response::HTTP_INTERNAL_SERVER_ERROR);
         }

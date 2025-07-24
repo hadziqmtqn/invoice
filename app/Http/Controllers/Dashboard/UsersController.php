@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\UserService;
 use App\Traits\ApiResponse;
 use App\Traits\HandlesApiTryCatch;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,6 +33,7 @@ class UsersController extends Controller
         return $this->tryCatchApi(function () use ($request) {
             $users = User::filter($request)
                 ->orderByDesc('created_at')
+                ->whereNotIn('id', [Auth::id()])
                 ->paginate($this->sort($request));
 
             return $this->paginateResponse($users->getCollection()->map(function (User $user) {

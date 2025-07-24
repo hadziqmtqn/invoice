@@ -22,16 +22,20 @@ class ZohoTokenService
 
         $client = new Client();
 
+        $accessTokenExists = $config->refresh_token && $config->zohoToken?->access_token ? 'refresh_token' : 'authorization_code';
+
         $data = [
             'client_id' => $config->client_id,
             'client_secret' => $config->client_secret,
             'redirect_uri' => $config->redirect_url,
-            'grant_type' => $config->grant_type,
+            'grant_type' => $accessTokenExists,
         ];
 
-        if ($config->grant_type === 'authorization_code') {
+        if ($accessTokenExists === 'authorization_code') {
             $data['code'] = $config->code;
-        } else if ($config->grant_type === 'refresh_token') {
+        }
+
+        if ($accessTokenExists === 'refresh_token') {
             $data['refresh_token'] = $config->refresh_token;
         }
 

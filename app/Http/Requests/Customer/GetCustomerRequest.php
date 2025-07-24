@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Requests\Customer;
+
+use App\Traits\ApiResponse;
+use App\Traits\HandlesValidationFailure;
+use Illuminate\Foundation\Http\FormRequest;
+
+class GetCustomerRequest extends FormRequest
+{
+    use ApiResponse, HandlesValidationFailure;
+
+    public function rules(): array
+    {
+        return [
+            'search' => ['nullable'],
+            'organization_id' => ['required', 'integer', 'exists:organizations,id']
+        ];
+    }
+
+    public function authorize(): bool
+    {
+        return true;
+    }
+}

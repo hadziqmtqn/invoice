@@ -22,7 +22,7 @@ trait AutoRefreshesZohoToken
     {
         $token = ZohoToken::where('zoho_config_id', $config->id)->first();
         if (!$token) {
-            throw new Exception('Token tidak ditemukan.');
+            ZohoTokenService::requestAndStoreToken($config);
         }
 
         $client = new Client();
@@ -50,9 +50,7 @@ trait AutoRefreshesZohoToken
         }
 
         if ($tokenExpired) {
-            // Refresh token
-            ZohoTokenService::requestAndStoreToken($config);
-            $token = ZohoToken::where('zoho_config_id', $config->id)->first();
+            $token->refresh(); // ambil data terbaru jika ada update didatabase
             $accessToken = $token->access_token;
             // Ulangi request
             $response = $callback($accessToken, $client);
