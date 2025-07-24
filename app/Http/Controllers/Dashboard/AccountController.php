@@ -19,7 +19,8 @@ class AccountController extends Controller
             $user = Auth::user();
             return $this->apiResponse('Get data success', [
                 'name' => $user->name,
-                'email' => $user->email
+                'email' => $user->email,
+                'avatar' => $user->avatar()
             ], Response::HTTP_OK);
         });
     }
