@@ -47,12 +47,12 @@ class ZohoCustomerService
                     'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
                     'X-com-zoho-invoice-organizationid' => $organization->organization_id
                 ],
-                'json' => [
-                    'contact_name' => $request->input('contact_name'),
-                    'company_name' => $request->input('company_name'),
-                    'website' => $request->input('website'),
-                    'notes' => $request->input('notes')
-                ],
+                'json' => $request->only([
+                    'contact_name',
+                    'company_name',
+                    'website',
+                    'notes'
+                ]),
                 'http_errors' => false,
             ]);
         });
@@ -92,12 +92,12 @@ class ZohoCustomerService
                     'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
                     'X-com-zoho-invoice-organizationid' => $organization->organization_id
                 ],
-                'json' => [
-                    'contact_name' => $request->input('contact_name'),
-                    'company_name' => $request->input('company_name'),
-                    'website' => $request->input('website'),
-                    'notes' => $request->input('notes')
-                ],
+                'json' => $request->only([
+                    'contact_name',
+                    'company_name',
+                    'website',
+                    'notes'
+                ]),
                 'http_errors' => false,
             ]);
         });

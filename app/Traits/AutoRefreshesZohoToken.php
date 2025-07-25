@@ -30,7 +30,7 @@ trait AutoRefreshesZohoToken
 
         $client = new Client();
 
-        // Panggil callback pertama kali
+        // Eksekusi callback pertama kali
         $response = $callback($accessToken, $client);
 
         if (is_array($response)) {
@@ -51,9 +51,13 @@ trait AutoRefreshesZohoToken
             }
         }
 
+        // Jika expired, refresh token dan ulangi request sekali lagi
         if ($tokenExpired) {
             ZohoTokenService::requestAndStoreToken($config);
-            // Ulangi request
+            // Ambil access token terbaru
+            $token->refresh();
+            $accessToken = $token->access_token;
+
             $response = $callback($accessToken, $client);
 
             if (is_array($response)) {
@@ -62,10 +66,10 @@ trait AutoRefreshesZohoToken
 
             $body = json_decode($response->getBody()->getContents(), true);
             $status = $response->getStatusCode();
-            if ($status !== 200) {
+            if ($status < 200 || $status >= 300) {
                 throw new Exception('Gagal fetch data setelah refresh token: ' . json_encode($body));
             }
-        } elseif ($status !== 200) {
+        } elseif ($status < 200 || $status >= 300) {
             throw new Exception('Gagal fetch data: ' . json_encode($body));
         }
 
