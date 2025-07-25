@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('customers')->group(function () {
         Route::get('/', [CustomerController::class, 'index']);
+        Route::post('/store', [CustomerController::class, 'store']);
         Route::get('/{organization:slug}/{customerId}', [CustomerController::class, 'show']);
         Route::put('/{organization:slug}/{customerId}', [CustomerController::class, 'update']);
     });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\GetCustomerRequest;
+use App\Http\Requests\Customer\CustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Organization;
 use App\Services\ZohoCustomerService;
@@ -38,6 +39,16 @@ class CustomerController extends Controller
                 'organizationId' => $organization->organization_id,
                 'custumers' => $this->zohoCustomerService->getCustomers($organization, $request)
             ], Response::HTTP_OK);
+        });
+    }
+
+    public function store(CustomerRequest $request): JsonResponse
+    {
+        $organization = Organization::with('zohoConfig.zohoToken')
+            ->findOrFail($request->input('organization_id'));
+
+        return $this->tryCatchApi(function () use ($request, $organization) {
+            return $this->apiResponse('Create data success', $this->zohoCustomerService->store($request, $organization), Response::HTTP_OK);
         });
     }
 

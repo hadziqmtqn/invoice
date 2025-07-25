@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\Customer\CustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Organization;
 use App\Traits\AutoRefreshesZohoToken;
@@ -36,6 +37,32 @@ class ZohoCustomerService
     /**
      * @throws Exception
      */
+    public function store(CustomerRequest $request, Organization $organization): array
+    {
+        $body = $this->withZohoToken($organization->zohoConfig, function ($accessToken, $client) use ($request, $organization) {
+            $url = $organization->zohoConfig?->zohoToken?->api_domain . '/invoice/v3/contacts/';
+            return $client->post($url, [
+                'headers' => [
+                    'content-type' => 'application/json',
+                    'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
+                    'X-com-zoho-invoice-organizationid' => $organization->organization_id
+                ],
+                'json' => [
+                    'contact_name' => $request->input('contact_name'),
+                    'company_name' => $request->input('company_name'),
+                    'website' => $request->input('website'),
+                    'notes' => $request->input('notes')
+                ],
+                'http_errors' => false,
+            ]);
+        });
+
+        return $body['contact'] ?? [];
+    }
+
+    /**
+     * @throws Exception
+     */
     public function show(Organization $organization, $customerId): array
     {
         $body = $this->withZohoToken($organization->zohoConfig, function ($accessToken, $client) use ($organization, $customerId) {
@@ -65,7 +92,12 @@ class ZohoCustomerService
                     'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
                     'X-com-zoho-invoice-organizationid' => $organization->organization_id
                 ],
-                'json' => $request->all(),
+                'json' => [
+                    'contact_name' => $request->input('contact_name'),
+                    'company_name' => $request->input('company_name'),
+                    'website' => $request->input('website'),
+                    'notes' => $request->input('notes')
+                ],
                 'http_errors' => false,
             ]);
         });
