@@ -57,7 +57,7 @@ class ZohoConfigController extends Controller
             }
             DB::commit();
 
-            return $this->apiResponse('Get data success', [
+            return $this->apiResponse('Data saved successfully', [
                 'organizationName' => $organization->name,
                 'code' => $zohoConfig->code,
                 'clientId' => $zohoConfig->client_id,
