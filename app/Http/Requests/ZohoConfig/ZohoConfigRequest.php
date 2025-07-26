@@ -13,7 +13,7 @@ class ZohoConfigRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => ['required', 'unique:zoho_configs,code,' . $this->route('zohoConfig')->id . ',id'],
+            'code' => ['required'],
             'client_id' => ['required'],
             'client_secret' => ['required'],
             'redirect_url' => ['required'],

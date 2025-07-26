@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Dashboard\AccountController;
-use App\Http\Controllers\Dashboard\AppController;
-use App\Http\Controllers\Dashboard\ZohoCustomersController;
-use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\BaseData\AccountController;
+use App\Http\Controllers\Dashboard\BaseData\AppController;
+use App\Http\Controllers\Dashboard\BaseData\DashboardController;
+use App\Http\Controllers\Dashboard\BaseData\UsersController;
 use App\Http\Controllers\Dashboard\OrganizationController;
-use App\Http\Controllers\Dashboard\UsersController;
 use App\Http\Controllers\Dashboard\ZohoConfigController;
+use App\Http\Controllers\Dashboard\ZohoCustomersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,8 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('zoho-config')->group(function () {
-        Route::get('/', [ZohoConfigController::class, 'index']);
-        Route::put('/{zohoConfig:id}/update', [ZohoConfigController::class, 'update']);
+        Route::get('/{organization:slug}', [ZohoConfigController::class, 'index']);
+        Route::put('/{organization:slug}/update', [ZohoConfigController::class, 'update']);
     });
 
     Route::prefix('customers')->group(function () {
