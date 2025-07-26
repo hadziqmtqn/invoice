@@ -15,7 +15,7 @@ class ZohoCustomerService
     /**
      * @throws Exception
      */
-    public function getCustomers(Organization $organization, $request): array
+    public function getCustomers($request, Organization $organization): array
     {
         $body = $this->withZohoToken($organization->zohoConfig, function ($accessToken, $client) use ($organization, $request) {
             $url = $organization->zohoConfig?->zohoToken?->api_domain . '/invoice/v3/contacts';
@@ -31,7 +31,22 @@ class ZohoCustomerService
             ]);
         });
 
-        return $body['contacts'] ?? [];
+        if ($body->getStatusCode() !== 200) {
+            throw new Exception('Failed to fetch customers from Zoho: ' . $body->getReasonPhrase());
+        }
+
+        $body = json_decode($body->getBody()->getContents(), true);
+
+        return [
+            'data' => $body['contacts'] ?? [],
+            'meta' => $body['page_context'] ?? [
+                'page' => 1,
+                'per_page' => 20,
+                'has_more_page' => false,
+                'total_pages' => 1,
+                'total_count' => 0
+            ]
+        ];
     }
 
     /**

@@ -27,17 +27,20 @@ class ZohoCustomersController extends Controller
         $this->zohoCustomerService = $zohoCustomerService;
     }
 
-    public function index(FilterRequest $request): JsonResponse
+    public function index(FilterRequest $request, Organization $organization): JsonResponse
     {
-        $organization = Organization::with('zohoConfig.zohoToken')
-            ->findOrFail($request->input('organization_id'));
+        $organization->load('zohoConfig.zohoToken');
 
-        return $this->tryCatchApi(function () use ($organization, $request) {
+        return $this->tryCatchApi(function () use ($request, $organization) {
+            if (!$organization->zohoConfig?->zohoToken) {
+                return $this->apiResponse('Zoho configuration not found');
+            }
+
             return $this->apiResponse('Get data success', [
                 'organizationSlug' => $organization->slug,
                 'organizationName' => $organization->name,
                 'organizationId' => $organization->organization_id,
-                'custumers' => $this->zohoCustomerService->getCustomers($organization, $request)
+                'custumers' => $this->zohoCustomerService->getCustomers($request, $organization),
             ], Response::HTTP_OK);
         });
     }

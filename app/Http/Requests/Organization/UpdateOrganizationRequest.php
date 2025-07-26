@@ -6,7 +6,7 @@ use App\Traits\ApiResponse;
 use App\Traits\HandlesValidationFailure;
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrganizationRequest extends FormRequest
+class UpdateOrganizationRequest extends FormRequest
 {
     use ApiResponse, HandlesValidationFailure;
 
@@ -14,7 +14,7 @@ class OrganizationRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'organization_id' => ['required', 'unique:organizations,organization_id']
+            'organization_id' => ['required', 'unique:organizations,organization_id,' . $this->route('organization')->slug . ',slug'],
         ];
     }
 

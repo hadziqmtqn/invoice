@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Organization\FilterRequest;
 use App\Http\Requests\Organization\OrganizationRequest;
+use App\Http\Requests\Organization\UpdateOrganizationRequest;
 use App\Models\Organization;
 use App\Services\OrganizationService;
 use App\Traits\ApiResponse;
@@ -33,9 +34,9 @@ class OrganizationController extends Controller
 
             return $this->apiResponse('Get data success', $organizations->map(function (Organization $organization) {
                 return [
-                    'id' => $organization->id,
+                    'slug' => $organization->slug,
                     'name' => $organization->name,
-                    'organizationId' => $organization->organization_id
+                    'organizationId' => $organization->organization_id,
                 ];
             }), Response::HTTP_OK);
         });
@@ -44,9 +45,7 @@ class OrganizationController extends Controller
     public function store(OrganizationRequest $request): JsonResponse
     {
         return $this->tryCatchApi(function () use ($request) {
-            $organization = Organization::lockForUpdate()
-                ->firstOrNew();
-
+            $organization = new Organization();
             $organization->name = $request->input('name');
             $organization->organization_id = $request->input('organization_id');
             $organization->save();
@@ -55,7 +54,7 @@ class OrganizationController extends Controller
         });
     }
 
-    public function update(OrganizationRequest $request, Organization $organization): JsonResponse
+    public function update(UpdateOrganizationRequest $request, Organization $organization): JsonResponse
     {
         return $this->tryCatchApi(function () use ($request, $organization) {
             $organization->name = $request->input('name');

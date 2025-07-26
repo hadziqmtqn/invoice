@@ -14,7 +14,6 @@ class FilterRequest extends FormRequest
     {
         return [
             'search' => ['nullable'],
-            'organization_id' => ['required', 'integer', 'exists:organizations,id']
         ];
     }
 
