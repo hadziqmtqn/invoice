@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\AccountController;
 use App\Http\Controllers\Dashboard\AppController;
-use App\Http\Controllers\Dashboard\CustomerController;
+use App\Http\Controllers\Dashboard\ZohoCustomersController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\OrganizationController;
 use App\Http\Controllers\Dashboard\UsersController;
@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('organization')->group(function () {
         Route::get('/', [OrganizationController::class, 'index']);
         Route::post('/store', [OrganizationController::class, 'store']);
+        Route::put('/{organization:slug}/update', [OrganizationController::class, 'update']);
     });
 
     Route::prefix('zoho-config')->group(function () {
@@ -43,10 +44,10 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('customers')->group(function () {
-        Route::get('/', [CustomerController::class, 'index']);
-        Route::post('/store', [CustomerController::class, 'store']);
-        Route::get('/{organization:slug}/{customerId}', [CustomerController::class, 'show']);
-        Route::put('/{organization:slug}/{customerId}', [CustomerController::class, 'update']);
+        Route::get('/', [ZohoCustomersController::class, 'index']);
+        Route::post('/store', [ZohoCustomersController::class, 'store']);
+        Route::get('/{organization:slug}/{customerId}', [ZohoCustomersController::class, 'show']);
+        Route::put('/{organization:slug}/{customerId}', [ZohoCustomersController::class, 'update']);
     });
 
     // TODO Select

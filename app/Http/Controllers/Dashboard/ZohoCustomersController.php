@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Customer\GetCustomerRequest;
+use App\Http\Requests\Customer\FilterRequest;
 use App\Http\Requests\Customer\CustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Organization;
@@ -13,7 +13,7 @@ use App\Traits\HandlesApiTryCatch;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomerController extends Controller
+class ZohoCustomersController extends Controller
 {
     use ApiResponse, HandlesApiTryCatch;
 
@@ -27,12 +27,12 @@ class CustomerController extends Controller
         $this->zohoCustomerService = $zohoCustomerService;
     }
 
-    public function index(GetCustomerRequest $request): JsonResponse
+    public function index(FilterRequest $request): JsonResponse
     {
-        return $this->tryCatchApi(function () use ($request) {
-            $organization = Organization::with('zohoConfig.zohoToken')
-                ->findOrFail($request->input('organization_id'));
+        $organization = Organization::with('zohoConfig.zohoToken')
+            ->findOrFail($request->input('organization_id'));
 
+        return $this->tryCatchApi(function () use ($organization, $request) {
             return $this->apiResponse('Get data success', [
                 'organizationSlug' => $organization->slug,
                 'organizationName' => $organization->name,

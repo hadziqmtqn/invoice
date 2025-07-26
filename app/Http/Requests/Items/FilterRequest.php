@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Customer;
+namespace App\Http\Requests\Items;
 
 use App\Traits\ApiResponse;
 use App\Traits\HandlesValidationFailure;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetCustomerRequest extends FormRequest
+class FilterRequest extends FormRequest
 {
     use ApiResponse, HandlesValidationFailure;
 
