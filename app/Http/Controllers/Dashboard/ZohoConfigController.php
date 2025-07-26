@@ -23,7 +23,7 @@ class ZohoConfigController extends Controller
 
         return $this->tryCatchApi(function () use ($organization) {
             return $this->apiResponse('Get data success', [
-                'id' => $organization->zohoConfig?->id,
+                'organizationSlug' => $organization->slug,
                 'organizationName' => $organization->name,
                 'organizationId' => $organization->organization_id,
                 'code' => $organization->zohoConfig?->code,
