@@ -28,6 +28,7 @@ class OrganizationService
     {
         return $this->organization
             ->filter($filterRequest)
+            ->orderByDesc('created_at')
             ->get();
     }
 
