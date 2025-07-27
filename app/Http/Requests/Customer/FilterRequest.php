@@ -14,6 +14,10 @@ class FilterRequest extends FormRequest
     {
         return [
             'search' => ['nullable'],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'per_page' => ['nullable', 'integer', 'min:1'],
+            'sort_column' => ['nullable', 'string'],
+            'sort_order' => ['nullable', 'in:A,D'],
         ];
     }
 

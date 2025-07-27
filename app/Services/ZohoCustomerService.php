@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\Customer\CustomerRequest;
+use App\Http\Requests\Customer\FilterRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Organization;
 use App\Traits\AutoRefreshesZohoToken;
@@ -15,7 +16,7 @@ class ZohoCustomerService
     /**
      * @throws Exception
      */
-    public function getCustomers($request, Organization $organization): array
+    public function getCustomers(FilterRequest $request, Organization $organization): array
     {
         $body = $this->withZohoToken($organization->zohoConfig, function ($accessToken, $client) use ($organization, $request) {
             $url = $organization->zohoConfig?->zohoToken?->api_domain . '/invoice/v3/contacts';
@@ -25,7 +26,11 @@ class ZohoCustomerService
                     'X-com-zoho-invoice-organizationid' => $organization->organization_id
                 ],
                 'query' => [
-                    'search_text' => $request['search'] ?? null
+                    'search_text' => $request->input('search') ?? null,
+                    'page' => $request->input('page') ?? 1,
+                    'per_page' => $request->input('per_page') ?? 10,
+                    'sort_column' => $request->input('sort_column') ?? 'contact_name',
+                    'sort_order' => $request->input('sort_order') ?? 'A',
                 ],
                 'http_errors' => false,
             ]);
