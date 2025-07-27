@@ -44,8 +44,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('customers')->group(function () {
-        Route::get('/', [ZohoCustomersController::class, 'index']);
-        Route::post('/store', [ZohoCustomersController::class, 'store']);
+        Route::get('/{organization:slug}', [ZohoCustomersController::class, 'index']);
+        Route::post('/{organization:slug}/store', [ZohoCustomersController::class, 'store']);
         Route::get('/{organization:slug}/{customerId}', [ZohoCustomersController::class, 'show']);
         Route::put('/{organization:slug}/{customerId}', [ZohoCustomersController::class, 'update']);
     });

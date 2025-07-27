@@ -31,12 +31,6 @@ class ZohoCustomerService
             ]);
         });
 
-        if ($body->getStatusCode() !== 200) {
-            throw new Exception('Failed to fetch customers from Zoho: ' . $body->getReasonPhrase());
-        }
-
-        $body = json_decode($body->getBody()->getContents(), true);
-
         return [
             'data' => $body['contacts'] ?? [],
             'meta' => $body['page_context'] ?? [

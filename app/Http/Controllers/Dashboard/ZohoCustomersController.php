@@ -40,15 +40,14 @@ class ZohoCustomersController extends Controller
                 'organizationSlug' => $organization->slug,
                 'organizationName' => $organization->name,
                 'organizationId' => $organization->organization_id,
-                'custumers' => $this->zohoCustomerService->getCustomers($request, $organization),
+                'customers' => $this->zohoCustomerService->getCustomers($request, $organization),
             ], Response::HTTP_OK);
         });
     }
 
-    public function store(CustomerRequest $request): JsonResponse
+    public function store(CustomerRequest $request, Organization $organization): JsonResponse
     {
-        $organization = Organization::with('zohoConfig.zohoToken')
-            ->findOrFail($request->input('organization_id'));
+        $organization->load('zohoConfig.zohoToken');
 
         return $this->tryCatchApi(function () use ($request, $organization) {
             return $this->apiResponse('Create data success', $this->zohoCustomerService->store($request, $organization), Response::HTTP_OK);
