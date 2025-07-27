@@ -37,7 +37,7 @@ class ZohoCustomerService
         });
 
         return [
-            'data' => $body['contacts'] ?? [],
+            'data' => array_map([$this, 'returnResponse'], $body['contacts'] ?? []),
             'meta' => $body['page_context'] ?? [
                 'page' => 1,
                 'per_page' => 20,
@@ -71,7 +71,7 @@ class ZohoCustomerService
             ]);
         });
 
-        return $body['contact'] ?? [];
+        return $this->returnResponse($body['contact'] ?? []);
     }
 
     /**
@@ -90,7 +90,7 @@ class ZohoCustomerService
             ]);
         });
 
-        return $body['contact'] ?? [];
+        return $this->returnResponse($body['contact'] ?? []);
     }
 
     /**
@@ -116,6 +116,27 @@ class ZohoCustomerService
             ]);
         });
 
-        return $body['contact'] ?? [];
+        return $this->returnResponse($body['contact'] ?? []);
+    }
+
+    // return response
+    private function returnResponse(array $body): array
+    {
+        return array_intersect_key($body, array_flip([
+            'contact_id',
+            'contact_name',
+            'company_name',
+            'contact_number',
+            'contact_tax_information',
+            'first_name',
+            'last_name',
+            'designation',
+            'department',
+            'website',
+            'notes',
+            'email',
+            'mobile',
+            'status'
+        ]));
     }
 }

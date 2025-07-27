@@ -59,7 +59,12 @@ class ZohoCustomersController extends Controller
         $organization->load('zohoConfig.zohoToken');
 
         return $this->tryCatchApi(function () use ($organization, $customerId) {
-            return $this->apiResponse('Get data success', $this->zohoCustomerService->show($organization, $customerId), Response::HTTP_OK);
+            return $this->apiResponse('Get data success', [
+                'organizationSlug' => $organization->slug,
+                'organizationName' => $organization->name,
+                'organizationId' => $organization->organization_id,
+                'customer' => $this->zohoCustomerService->show($organization, $customerId)
+            ], Response::HTTP_OK);
         });
     }
 
@@ -68,7 +73,12 @@ class ZohoCustomersController extends Controller
         $organization->load('zohoConfig.zohoToken');
 
         return $this->tryCatchApi(function () use ($request, $organization, $customerId) {
-            return $this->apiResponse('Update data success', $this->zohoCustomerService->update($request, $organization, $customerId), Response::HTTP_OK);
+            return $this->apiResponse('Update data success', [
+                'organizationSlug' => $organization->slug,
+                'organizationName' => $organization->name,
+                'organizationId' => $organization->organization_id,
+                'customer' => $this->zohoCustomerService->update($request, $organization, $customerId)
+            ], Response::HTTP_OK);
         });
     }
 }
