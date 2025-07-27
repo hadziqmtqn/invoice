@@ -13,13 +13,11 @@ class ItemsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'organization_id' => ['required', 'integer', 'exists:organizations,id'],
+            'product_type' => ['nullable', 'in:goods,service'],
             'name' => ['required', 'string', 'max:100'],
             'rate' => ['required', 'numeric'],
-            'description' => ['nullable'],
-            'tax_id' => ['nullable', 'string'],
+            'description' => ['nullable', 'string', 'max:255'],
             'sku' => ['nullable'],
-            'product_type' => ['nullable', 'in:goods,service']
         ];
     }
 

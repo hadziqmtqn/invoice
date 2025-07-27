@@ -27,6 +27,7 @@ class ZohoCustomerService
                 ],
                 'query' => [
                     'search_text' => $request->input('search') ?? null,
+                    'filter_by' => $request->input('filter_by') ?? null,
                     'page' => $request->input('page') ?? 1,
                     'per_page' => $request->input('per_page') ?? 10,
                     'sort_column' => $request->input('sort_column') ?? 'contact_name',

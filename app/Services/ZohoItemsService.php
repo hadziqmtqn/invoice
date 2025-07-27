@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\Items\FilterRequest;
 use App\Http\Requests\Items\ItemsRequest;
 use App\Models\Organization;
 use App\Traits\AutoRefreshesZohoToken;
@@ -14,7 +15,7 @@ class ZohoItemsService
     /**
      * @throws Exception
      */
-    public function getItems(Organization $organization, $request): array
+    public function getItems(FilterRequest $request, Organization $organization): array
     {
         $body = $this->withZohoToken($organization->zohoConfig, function ($accessToken, $client) use ($organization, $request) {
             $url = $organization->zohoConfig?->zohoToken?->api_domain . '/invoice/v3/items';
@@ -24,13 +25,17 @@ class ZohoItemsService
                     'X-com-zoho-invoice-organizationid' => $organization->organization_id
                 ],
                 'query' => [
-                    'search_text' => $request['search'] ?? null
+                    'search_text' => $request->input('search') ?? null,
+                    'filter_by' => $request->input('filter_by') ?? null,
+                    'page' => $request->input('page', 1),
+                    'per_page' => $request->input('per_page', 20),
+                    'sort_column' => $request->input('sort_column', 'name'),
                 ],
                 'http_errors' => false,
             ]);
         });
 
-        return $body['items'] ?? [];
+        return array_map([$this, 'returnResponse'], $body['items'] ?? []);
     }
 
     /**
@@ -50,7 +55,6 @@ class ZohoItemsService
                     'name',
                     'rate',
                     'description',
-                    'tax_id',
                     'sku',
                     'product_type'
                 ]),
@@ -58,7 +62,7 @@ class ZohoItemsService
             ]);
         });
 
-        return $body['item'] ?? [];
+        return $this->returnResponse($body['item'] ?? []);
     }
 
     /**
@@ -78,7 +82,6 @@ class ZohoItemsService
                     'name',
                     'rate',
                     'description',
-                    'tax_id',
                     'sku',
                     'product_type'
                 ]),
@@ -86,6 +89,23 @@ class ZohoItemsService
             ]);
         });
 
-        return $body['item'] ?? [];
+        return $this->returnResponse($body['item'] ?? []);
+    }
+
+    private function returnResponse(array $body): array
+    {
+        return array_intersect_key($body, array_flip([
+            "item_id",
+            "name",
+            "item_name",
+            "unit",
+            "status",
+            "source",
+            "description",
+            "rate",
+            "product_type",
+            "sku",
+            "created_time",
+        ]));
     }
 }

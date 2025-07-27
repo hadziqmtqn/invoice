@@ -14,7 +14,10 @@ class FilterRequest extends FormRequest
     {
         return [
             'search' => ['nullable'],
-            'organization_id' => ['required', 'integer', 'exists:organizations,id']
+            'filter_by' => ['nullable', 'in:Status.All,Status.Active,Status.Inactive'],
+            'per_page' => ['nullable', 'integer', 'min:1'],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'sort_column' => ['nullable', 'string', 'in:name,rate'],
         ];
     }
 

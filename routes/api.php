@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\BaseData\UsersController;
 use App\Http\Controllers\Dashboard\OrganizationController;
 use App\Http\Controllers\Dashboard\ZohoConfigController;
 use App\Http\Controllers\Dashboard\ZohoCustomersController;
+use App\Http\Controllers\Dashboard\ZohoItemsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{organization:slug}/store', [ZohoCustomersController::class, 'store']);
         Route::get('/{organization:slug}/{customerId}', [ZohoCustomersController::class, 'show']);
         Route::put('/{organization:slug}/{customerId}', [ZohoCustomersController::class, 'update']);
+    });
+
+    Route::prefix('items')->group(function () {
+        Route::get('/{organization:slug}', [ZohoItemsController::class, 'index']);
+        Route::post('/{organization:slug}/store', [ZohoItemsController::class, 'store']);
+        Route::put('/{organization:slug}/{itemId}', [ZohoItemsController::class, 'update']);
     });
 
     // TODO Select

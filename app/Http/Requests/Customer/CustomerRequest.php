@@ -13,7 +13,6 @@ class CustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'organization_id' => ['required', 'integer', 'exists:organizations,id'],
             'contact_name' => ['required', 'min:3', 'max:100'],
             'company_name' => ['nullable', 'min:3', 'max:100'],
             'website' => ['nullable'],
