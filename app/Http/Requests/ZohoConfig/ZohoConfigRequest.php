@@ -16,7 +16,7 @@ class ZohoConfigRequest extends FormRequest
             'code' => ['required'],
             'client_id' => ['required'],
             'client_secret' => ['required'],
-            'redirect_url' => ['required'],
+            'redirect_uri' => ['required'],
             'refresh_token' => ['nullable']
         ];
     }

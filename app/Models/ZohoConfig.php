@@ -15,7 +15,7 @@ class ZohoConfig extends Model
         'code',
         'client_id',
         'client_secret',
-        'redirect_url',
+        'redirect_uri',
         'refresh_token',
     ];
 

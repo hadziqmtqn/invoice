@@ -9,9 +9,21 @@ class OrganizationSeeder extends Seeder
 {
     public function run(): void
     {
-        $organization = new Organization();
-        $organization->name = 'Bekenweb';
-        $organization->organization_id = '891726328';
-        $organization->save();
+        foreach ([
+            [
+                'name' => 'Bekenweb',
+                'organization_id' => '891726328',
+            ],
+            [
+                'name' => 'Noname Inc',
+                'organization_id' => '894707213',
+            ]
+                 ] as $item) {
+            $organization = new Organization();
+            $organization->name = $item['name'];
+            $organization->organization_id = $item['organization_id'];
+            $organization->save();
+        }
+
     }
 }

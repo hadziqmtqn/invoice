@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('zoho_tokens', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('zoho_config_id');
+            $table->unsignedBigInteger('zoho_config_id')->unique();
             $table->string('access_token');
             $table->string('refresh_token');
             $table->string('api_domain');

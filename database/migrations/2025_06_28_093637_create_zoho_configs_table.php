@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('code');
             $table->string('client_id');
             $table->string('client_secret');
-            $table->string('redirect_url');
+            $table->string('redirect_uri');
             $table->string('refresh_token')->nullable();
             $table->timestamps();
 

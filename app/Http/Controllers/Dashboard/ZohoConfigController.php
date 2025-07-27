@@ -29,7 +29,7 @@ class ZohoConfigController extends Controller
                 'code' => $organization->zohoConfig?->code,
                 'clientId' => $organization->zohoConfig?->client_id,
                 'clientSecret' => $organization->zohoConfig?->client_secret,
-                'redirectUrl' => $organization->zohoConfig?->redirect_url,
+                'redirectUri' => $organization->zohoConfig?->redirect_uri,
                 'refreshToken' => $organization->zohoConfig?->refresh_token
             ], Response::HTTP_OK);
         });
@@ -48,11 +48,11 @@ class ZohoConfigController extends Controller
             $zohoConfig->code = $request->input('code');
             $zohoConfig->client_id = $request->input('client_id');
             $zohoConfig->client_secret = $request->input('client_secret');
-            $zohoConfig->redirect_url = $request->input('redirect_url');
+            $zohoConfig->redirect_uri = $request->input('redirect_uri');
             $zohoConfig->refresh_token = $request->input('refresh_token');
             $zohoConfig->save();
 
-            if ($zohoConfig->code != $request->input('code') || $zohoConfig->client_id != $request->input('client_id') || $zohoConfig->client_secret != $request->input('client_secret')) {
+            if (!$zohoConfig->zohoToken) {
                 ZohoTokenService::requestAndStoreToken($zohoConfig);
             }
             DB::commit();
@@ -62,7 +62,7 @@ class ZohoConfigController extends Controller
                 'code' => $zohoConfig->code,
                 'clientId' => $zohoConfig->client_id,
                 'clientSecret' => $zohoConfig->client_secret,
-                'redirectUrl' => $zohoConfig->redirect_url,
+                'redirectUri' => $zohoConfig->redirect_uri,
                 'refreshToken' => $zohoConfig->refresh_token
             ], Response::HTTP_OK);
         });

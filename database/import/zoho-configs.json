@@ -1,0 +1,20 @@
+[
+  {
+    "organization_id": "891726328",
+    "organization_name": "Bekenweb",
+    "code": "1000.e8178e9243319037fb5cf51c3afaae5d.57aaaf8ab601e5dd6944ecea9840e023",
+    "client_id": "1000.JM2C8O0HQSY8T5AIA18YWL3E6RJTKY",
+    "client_secret": "5af225bee38ba428c995c4e831d598b0e5124d6c78",
+    "redirect_uri": "http://www.zoho.com/invoice",
+    "refresh_token": "1000.c020723e9e9a7f8f2d74bcde33fe87a1.55a9ac5cb83229764acd8e8a6b58d83c"
+  },
+  {
+    "organization_id": "894707213",
+    "organization_name": "Noname Inc",
+    "code": "1000.335d9d7c374bc7a07b4be55af990d475.ce3fcc0b6bb73c5dfb9ad0e1f34d02fa",
+    "client_id": "1000.T9MPP768YLLGTZ5F5O23LO32QSZCZO",
+    "client_secret": "de0e775760466ff77ebd8c16bc980ade97384b7a15",
+    "redirect_uri": "http://www.zoho.com/invoice",
+    "refresh_token": "1000.832d65fcb0d07c4787e7b944c3da85f6.7472f8985e4412bac5ed4edaa1bbb2f5"
+  }
+]

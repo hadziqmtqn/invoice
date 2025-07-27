@@ -22,12 +22,12 @@ class ZohoTokenService
 
         $client = new Client();
 
-        $accessTokenExists = $config->refresh_token && $config->zohoToken?->access_token ? 'refresh_token' : 'authorization_code';
+        $accessTokenExists = $config->zohoToken?->access_token ? 'refresh_token' : 'authorization_code';
 
         $data = [
             'client_id' => $config->client_id,
             'client_secret' => $config->client_secret,
-            'redirect_uri' => $config->redirect_url,
+            'redirect_uri' => $config->redirect_uri,
             'grant_type' => $accessTokenExists,
         ];
 
@@ -62,6 +62,11 @@ class ZohoTokenService
                         'expired_at' => Carbon::now()->addSeconds($body['expires_in'] ?? 3600),
                     ]
                 );
+
+                ZohoConfig::find($config->id)
+                    ->update([
+                        'refresh_token' => $body['refresh_token'] ?? $config->refresh_token
+                    ]);
                 return true;
             } else {
                 throw new Exception('Failed to get token: ' . json_encode($body));
