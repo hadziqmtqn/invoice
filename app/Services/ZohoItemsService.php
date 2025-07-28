@@ -92,6 +92,24 @@ class ZohoItemsService
         return $this->returnResponse($body['item'] ?? []);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function delete(Organization $organization, $itemId): array
+    {
+        return $this->withZohoToken($organization->zohoConfig, function ($accessToken, $client) use ($organization, $itemId) {
+            $url = $organization->zohoConfig?->zohoToken?->api_domain . '/invoice/v3/items/' . $itemId;
+            return $client->delete($url, [
+                'headers' => [
+                    'content-type' => 'application/json',
+                    'Authorization' => 'Zoho-oauthtoken ' . $accessToken,
+                    'X-com-zoho-invoice-organizationid' => $organization->organization_id
+                ],
+                'http_errors' => false,
+            ]);
+        });
+    }
+
     private function returnResponse(array $body): array
     {
         return array_intersect_key($body, array_flip([

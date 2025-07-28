@@ -54,7 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('items')->group(function () {
         Route::get('/{organization:slug}', [ZohoItemsController::class, 'index']);
         Route::post('/{organization:slug}/store', [ZohoItemsController::class, 'store']);
-        Route::put('/{organization:slug}/{itemId}', [ZohoItemsController::class, 'update']);
+        Route::put('/{organization:slug}/{itemId}/update', [ZohoItemsController::class, 'update']);
+        Route::delete('/{organization:slug}/{itemId}/delete', [ZohoItemsController::class, 'destroy']);
     });
 
     // TODO Select

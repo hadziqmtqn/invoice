@@ -67,4 +67,18 @@ class ZohoItemsController extends Controller
             ], Response::HTTP_OK);
         });
     }
+
+    public function destroy(Organization $organization, string $itemId): JsonResponse
+    {
+        return $this->tryCatchApi(function () use ($organization, $itemId) {
+            $organization->load('zohoConfig.zohoToken');
+
+            return $this->apiResponse('Item updated successfully', [
+                'organizationSlug' => $organization->slug,
+                'organizationName' => $organization->name,
+                'organizationId' => $organization->organization_id,
+                'item' => $this->zohoItemsService->delete($organization, $itemId),
+            ], Response::HTTP_OK);
+        });
+    }
 }
